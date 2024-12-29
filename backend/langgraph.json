@@ -1,0 +1,20 @@
+{
+  "node_version": "20",
+  "dockerfile_lines": [],
+  "agent": "OpenAI",
+  "tools": ["retrieve", "summarize"],
+  "env": ".env",
+  "dependencies": {
+    "python": [
+      "fastapi",
+      "langgraph",
+      "copilotkit",
+      "langchain",
+      "langchain-anthropic",
+      "uvicorn"
+    ]
+  },
+  "graphs": {
+    "my_agent": "./my_agent/agent.py:graph"
+  }
+}

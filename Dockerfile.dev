@@ -1,0 +1,37 @@
+# Use an official Node.js runtime as the base image for frontend
+FROM node:20 as frontend
+
+# Set the working directory for the frontend
+WORKDIR /frontend
+
+# Copy the frontend's package.json and package-lock.json (if available)
+COPY frontend/package*.json ./
+
+# Install frontend dependencies
+RUN npm install
+
+# Build the frontend application (if applicable)
+RUN npm run build
+
+# ---- Backend Stage ----
+
+# Use Python as the base image for the backend
+FROM python:3.9-slim as backend
+
+# Set the working directory in the container for the backend
+WORKDIR /backend
+
+# Copy the langgraph.json configuration file (from the backend directory)
+COPY backend/langgraph.json ./
+
+# Copy the backend application code (including agent.py and other files)
+COPY backend ./
+
+# Install Python dependencies (e.g., requirements.txt if present)
+RUN pip install -r requirements.txt  # Assuming you have a requirements.txt file for Python dependencies
+
+# Expose the backend port (if required by your app)
+EXPOSE 5000
+
+# Set the default command to run your backend Python agent
+CMD ["python", "my_agent/agent.py"]  # Adjust the path as needed

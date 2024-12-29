@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #007BFF; /* Example primary color */
+  --secondary: #F4A261; /* Example secondary color */
+  --accent: #2A9D8F; /* Accent color for highlights */
+  --text-light: #201e1e; /* Light text color for dark mode */
+  --text-dark: #111111; /* Dark text for light mode */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --primary: #1d3557; /* Darker primary color for dark mode */
+    --secondary: #e9c46a; /* Lighter secondary color */
+    --accent: #264653; /* Accent color for dark mode */
+    --text-light: #f5f5f5;
+    --text-dark: #171717;
+  }
+}
+
+/* Global Styles */
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; /* Apply Geist font */
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-geist-mono), monospace; /* Use Mono font for headings */
+  color: var(--primary); /* Make headings stand out */
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+a:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Button Styles */
+button {
+  background-color: var(--primary);
+  color: var(--foreground);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--secondary);
+  transform: scale(1.05); /* Slight hover effect */
+}
+
+button:focus {
+  outline: 2px solid var(--accent); /* Focus outline for accessibility */
+  outline-offset: 2px;
+}
+
+/* Footer Styles */
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: var(--foreground);
+  color: var(--background);
+}
+
+footer a {
+  color: var(--accent);
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Input Styles */
+input {
+  color: var(--text-dark);
+  background-color: var(--background);
+  border: 1px solid var(--foreground);
+  padding: 10px;
+  border-radius: 5px;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+input::placeholder {
+  color: var(--text-dark);
+  opacity: 0.8;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 5px var(--primary);
+}
+
+@media (prefers-color-scheme: dark) {
+  input {
+    color: var(--text-light);
+    background-color: var(--foreground);
+    border-color: var(--background);
+  }
+
+  input::placeholder {
+    color: var(--text-dark);
+  }
+}
+
+/* Layout Utility Classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-center {
+  display: grid;
+  place-items: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  body {
+    padding: 0 10px; /* Adjust padding for small screens */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-size: 1.5rem; /* Resize headings for small screens */
+  }
+
+  .container {
+    max-width: 100%; /* Allow container to adapt fully to screen */
+  }
+}
+
+/* Spacing Utility Classes */
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.sm\:p-6 {
+  padding: 1.5rem;
+}
