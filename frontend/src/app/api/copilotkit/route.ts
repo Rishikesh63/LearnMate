@@ -1,37 +1,45 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { CopilotKitSDK, LangGraphAgent } from "copilotkit";
-import { loadEnvConfig } from "@next/env";
-import { graph } from "../../my_agent/agent"; // Import your graph from agent.js or agent.py
+import { NextRequest } from "next/server";
+import {
+  CopilotRuntime,
+  OpenAIAdapter,
+  copilotRuntimeNextJSAppRouterEndpoint,
+} from "@copilotkit/runtime";
+import OpenAI from "openai";
 
-// Load environment variables
-loadEnvConfig(process.cwd());
+// Check if copilotRuntimeNextJSAppRouterEndpoint is correctly imported
+console.log(copilotRuntimeNextJSAppRouterEndpoint);
 
-const sdk = new CopilotKitSDK({
-  agents: [
-    new LangGraphAgent({
-      name: "study_plan_assistant",
-      description: "An assistant that helps users create, modify, and review study plans based on preferences.",
-      graph: graph, // Graph from agent.py or agent.js
-    }),
+// Define the endpoint URL
+const remoteEndpointURL =
+  process.env.REMOTE_ACTION_URL || "http://localhost:8000/copilotkit";
+
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY, // Ensure this is set in your .env
+});
+
+// Create an OpenAI Adapter
+const openAIAdapter = new OpenAIAdapter({ openai });
+
+// Initialize CopilotRuntime with the adapter and remote endpoints
+const copilotKit = new CopilotRuntime({
+  agents: [openAIAdapter],
+  remoteEndpoints: [
+    {
+      url: remoteEndpointURL,
+    },
   ],
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  try {
-    // Handle different HTTP methods
-    if (req.method === "POST") {
-      // Example: Handle a POST request to interact with the agent
-      const { query } = req.body; // Assuming the request body contains a query
+export const POST = async (req: NextRequest) => {
+  // Check if copilotKit is properly initialized
+  console.log(copilotKit);
 
-      // Interact with LangGraph agent
-      const response = await sdk.query(query);
+  // Use copilotRuntimeNextJSAppRouterEndpoint to handle requests
+  const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
+    runtime: copilotKit,
+    endpoint: "/api/copilotkit",
+  });
 
-      res.status(200).json(response);
-    } else {
-      res.status(405).json({ message: "Method Not Allowed" });
-    }
-  } catch (error) {
-    console.error("Error processing request:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-}
+  return handleRequest(req);
+};
