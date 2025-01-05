@@ -1,29 +1,25 @@
 import { NextRequest } from "next/server";
 import {
   CopilotRuntime,
-  OpenAIAdapter,
+  GoogleGenerativeAIAdapter,
   copilotRuntimeNextJSAppRouterEndpoint,
 } from "@copilotkit/runtime";
-import OpenAI from "openai";
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
-// Check if copilotRuntimeNextJSAppRouterEndpoint is correctly imported
-console.log(copilotRuntimeNextJSAppRouterEndpoint);
-
-// Define the endpoint URL
-const remoteEndpointURL =
-  process.env.REMOTE_ACTION_URL || "http://localhost:8000/copilotkit";
-
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // Ensure this is set in your .env
+// Initialize Gemini (Google Generative AI)
+const gemini = new ChatGoogleGenerativeAI({
+  model: "gemini-1.5-flash",
+  temperature: 0,
+  maxRetries: 2,
 });
 
-// Create an OpenAI Adapter
-const openAIAdapter = new OpenAIAdapter({ openai });
+const serviceAdapter = new GoogleGenerativeAIAdapter(gemini);
 
-// Initialize CopilotRuntime with the adapter and remote endpoints
-const copilotKit = new CopilotRuntime({
-  agents: [openAIAdapter],
+// Define your endpoint URL
+const remoteEndpointURL = process.env.REMOTE_ACTION_URL || "http://localhost:8000/copilotkit";
+
+// Initialize CopilotRuntime with remote endpoints
+const runtime = new CopilotRuntime({
   remoteEndpoints: [
     {
       url: remoteEndpointURL,
@@ -31,13 +27,11 @@ const copilotKit = new CopilotRuntime({
   ],
 });
 
+// Define the POST request handler
 export const POST = async (req: NextRequest) => {
-  // Check if copilotKit is properly initialized
-  console.log(copilotKit);
-
-  // Use copilotRuntimeNextJSAppRouterEndpoint to handle requests
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
-    runtime: copilotKit,
+    runtime,
+    serviceAdapter,
     endpoint: "/api/copilotkit",
   });
 

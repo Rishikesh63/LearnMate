@@ -13,14 +13,12 @@ import os
 from dotenv import load_dotenv
 import logging
 
-# Load environment variables
 load_dotenv()
 tavily_api_key = os.getenv("TAVILY_API_KEY")
 openai_api_key = os.getenv("OPENAI_API_KEY")
 copilot_api_key = os.getenv("COPILOT_CLOUD_PUBLIC_API_KEY")
 langgraph_api_key = os.getenv("LANGGRAPH_API_KEY")
 
-# Check for missing API keys and raise appropriate errors
 if not tavily_api_key:
     raise ValueError("Missing TAVILY_API_KEY in environment variables.")
 if not openai_api_key:
@@ -30,23 +28,19 @@ if not copilot_api_key:
 if not langgraph_api_key:
     raise ValueError("Missing LANGGRAPH_API_KEY in environment variables.")
 
-# Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-# Define State structure
 class State(TypedDict):
     messages: list
     ask_human: bool
     user_preferences: dict
     study_plan: dict
 
-# Define RequestAssistance for escalation
 class RequestAssistance(BaseModel):
     """Escalate the conversation to an expert."""
     request: str
 
-# Initialize tools and LLMs
 tavily_tool = TavilySearchResults(max_results=2, tavily_api_key=tavily_api_key)
 tools = [tavily_tool]
 
@@ -54,7 +48,6 @@ anthropic_llm = ChatAnthropic(model="claude-3-5-sonnet-20240620")
 openai_llm = OpenAI(model="gpt-4o-mini", openai_api_key=openai_api_key)
 llm_with_tools = anthropic_llm.bind_tools(tools + [RequestAssistance])
 
-# Helper functions
 def validate_messages(messages):
     """
     Validate that all messages are in the correct format.
@@ -93,7 +86,6 @@ def debug_state(state):
     """
     logger.debug(f"State: {state}")
 
-# Generate a default study plan based on preferences
 def generate_study_plan(user_preferences: dict):
     topics = user_preferences.get("topics", ["General Studies"])
     duration = user_preferences.get("duration", "1 week")
@@ -109,19 +101,15 @@ def generate_study_plan(user_preferences: dict):
         ],
     }
 
-# Chatbot node: handles LLM responses and human escalation
 def chatbot(state: State):
     try:
-        # Validate and convert messages
         messages = state["messages"]
         validate_messages(messages)
 
-        # Check for specific triggers in user messages
         user_message = messages[-1]["content"].lower()
         if "study plan" in user_message:
             return get_study_plan({"state": state})
 
-        # Process messages with the LLM
         converted_messages = [validate_and_convert_message(msg) for msg in messages]
         debug_state(state)
 
@@ -142,13 +130,10 @@ def chatbot(state: State):
             "ask_human": False,
         }
 
-# Human node: handles interruptions for human feedback
 def human_node(state: State):
     return {"messages": state["messages"] + [{"role": "assistant", "content": "Awaiting human input..."}], "ask_human": False}
 
-# Node for generating study plans
 def get_study_plan(input_data: dict):
-    # Debugging: Log the structure of input_data to see if it contains the 'state' key
     logger.debug(f"Input data received: {input_data}")
 
     if "state" not in input_data:
@@ -171,22 +156,18 @@ def get_study_plan(input_data: dict):
 
     return {"state": state}
 
-# Review previous study plans
 def review_previous_plan(state: State):
     previous_plan = state.get("study_plan", "No previous plans available.")
     return {"messages": state["messages"] + [{"role": "assistant", "content": f"Here is your previous study plan: {previous_plan}"}]}
 
-# Human feedback node
 def human_feedback(state: State):
     return {"messages": state["messages"] + [{"role": "assistant", "content": "Would you like to approve or modify the study plan?"}], "ask_human": False}
 
-# Define next node selection logic
 def select_next_node(state: State):
     if state["ask_human"]:
         return "human"
     return tools_condition(state)
 
-# Build the state graph
 graph_builder = StateGraph(State)
 
 # Add nodes to the graph
