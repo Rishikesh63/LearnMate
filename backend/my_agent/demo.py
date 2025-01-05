@@ -30,7 +30,7 @@ def status():
 sdk = CopilotKitSDK(
     agents=[
         LangGraphAgent(
-            name="Study Plan Assistant",
+            name="study_plan_assistant",
             description=(
                 "An assistant that helps users create, modify, and review study plans "
                 "based on their preferences. It provides topic scheduling and feedback."

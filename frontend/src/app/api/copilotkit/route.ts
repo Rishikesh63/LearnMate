@@ -15,10 +15,8 @@ const gemini = new ChatGoogleGenerativeAI({
 
 const serviceAdapter = new GoogleGenerativeAIAdapter(gemini);
 
-// Define your endpoint URL
 const remoteEndpointURL = process.env.REMOTE_ACTION_URL || "http://localhost:8000/copilotkit";
 
-// Initialize CopilotRuntime with remote endpoints
 const runtime = new CopilotRuntime({
   remoteEndpoints: [
     {
@@ -27,7 +25,6 @@ const runtime = new CopilotRuntime({
   ],
 });
 
-// Define the POST request handler
 export const POST = async (req: NextRequest) => {
   const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
     runtime,
