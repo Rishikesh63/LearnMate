@@ -71,12 +71,10 @@ Navigate to the `backend` folder and set up the environment:
 cd backend
 ```
 
-- Install Python dependencies using Poetry or `requirements.txt`:
+- Install Python dependencies using Poetry :
   ```bash
-  poetry install  # If using Poetry
-  # OR
-  pip install -r requirements.txt
-  ```
+  poetry install
+
 
 - Run the backend server:
   ```bash
@@ -92,20 +90,6 @@ The backend will start at `http://127.0.0.1:8000` by default.
 1. Start the **backend server** first (`uvicorn`).
 2. Start the **frontend development server** (`npm run dev`).
 3. Open your browser and navigate to `http://localhost:3000` to interact with LearnMate.
-
----
-
-## Deployment (Optional)
-
-Use Docker to containerize the application for deployment:
-
-1. Build and run the Docker container:
-   ```bash
-   docker build -t learnmate-app .
-   docker run -p 3000:3000 -p 8000:8000 learnmate-app
-   ```
-
-2. Access the application at `http://localhost:3000`.
 
 ---
 
