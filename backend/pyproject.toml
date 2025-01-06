@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "backend"
+name = "my_agent"
 version = "0.1.0"
 description = ""
 authors = ["Rishikesh Maddhesiya <rishi89324@gmail.com>"]

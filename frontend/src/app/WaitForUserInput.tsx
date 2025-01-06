@@ -10,7 +10,7 @@ export function WaitForUserInput() {
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";
 
   useCopilotAction({
-    name: "study_plan_assistant",
+    name: "my_agent",
     available: "remote",
     parameters: [
       {
@@ -22,7 +22,7 @@ export function WaitForUserInput() {
     ],
     handler: async ({ query }) => {
       try {
-        const response = await fetch(BACKEND_URL, {
+        const response = await fetch("http://localhost:8000/copilotkit", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
