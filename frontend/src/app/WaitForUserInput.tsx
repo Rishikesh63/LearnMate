@@ -1,16 +1,19 @@
 "use client";
 
-import { useCopilotAction } from "@copilotkit/react-core";
+import { useCopilotAction, useCoAgent } from "@copilotkit/react-core";
 import { CopilotPopup } from "@copilotkit/react-ui";
-import { useState } from "react";
 
 export function WaitForUserInput() {
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  // Using CoAgent for state management
+  const popupAgent = useCoAgent({
+    name: "study_plan_assistant",
+    initialState: { isPopupOpen: false }, // Setting the initial state
+  });
 
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";
 
   useCopilotAction({
-    name: "my_agent",
+    name: "study_plan_assistant",
     available: "remote",
     parameters: [
       {
@@ -22,7 +25,7 @@ export function WaitForUserInput() {
     ],
     handler: async ({ query }) => {
       try {
-        const response = await fetch("http://localhost:8000/copilotkit", {
+        const response = await fetch(BACKEND_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -71,18 +74,18 @@ export function WaitForUserInput() {
         or get personalized learning tips. Let's build your path to success!
       </div>
 
-      {isPopupOpen && (
-        <CopilotPopup 
-          defaultOpen 
-          clickOutsideToClose={false} 
+      {popupAgent.state.isPopupOpen && (
+        <CopilotPopup
+          defaultOpen
+          clickOutsideToClose={false}
           className="rounded-lg shadow-lg border border-teal-500 animate-scale-in"
         />
       )}
 
-      <button 
+      <button
         aria-label="Start planning your study schedule"
         className="mt-6 px-6 py-3 bg-teal-700 hover:bg-teal-600 focus:ring-4 focus:ring-teal-400 focus:outline-none transition-all duration-300 rounded-full font-semibold shadow-md text-white"
-        onClick={() => setIsPopupOpen(true)}
+        onClick={() => popupAgent.setState({ isPopupOpen: true })} // Correct way to update state
       >
         Start Planning
       </button>

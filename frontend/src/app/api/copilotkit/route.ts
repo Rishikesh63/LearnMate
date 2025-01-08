@@ -15,12 +15,13 @@ const gemini = new ChatGoogleGenerativeAI({
 
 const serviceAdapter = new GoogleGenerativeAIAdapter(gemini);
 
-const remoteEndpointURL = process.env.REMOTE_ACTION_URL || "http://localhost:8000/copilotkit";
+const BASE_URL = process.env.REMOTE_ACTION_URL || "http://localhost:8000";
+console.log("BASE_URL",BASE_URL);
 
 const runtime = new CopilotRuntime({
-  remoteEndpoints: [
+  remoteActions: [
     {
-      url: remoteEndpointURL,
+      url: `$(BASE_URL)/copilotkit`,
     },
   ],
 });
