@@ -1,24 +1,14 @@
 import { NextRequest } from "next/server";
 import {
   CopilotRuntime,
-  GoogleGenerativeAIAdapter,
+  GroqAdapter,
   copilotRuntimeNextJSAppRouterEndpoint,
 } from "@copilotkit/runtime";
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
-// Initialize Gemini (Google Generative AI)
-const gemini = new ChatGoogleGenerativeAI({
-  model: "gemini-1.5-flash",
-  temperature: 0,
-  maxRetries: 2,
-});
-
-const serviceAdapter = new GoogleGenerativeAIAdapter(gemini);
-
-
+const serviceAdapter = new GroqAdapter({ model: "llama-3.3-70b-versatile" });
 
 const runtime = new CopilotRuntime({
-  remoteActions: [
+  remoteEndpoints: [
     {
       url: process.env.REMOTE_ACTION_URL || "http://localhost:8000/copilotkit",
     },
