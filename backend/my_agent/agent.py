@@ -32,10 +32,10 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 class State(TypedDict):
-    messages: list
+    messages: str
     ask_human: bool
-    user_preferences: dict
-    study_plan: dict
+    user_preferences: str
+    study_plan: str
 
 class RequestAssistance(BaseModel):
     """Escalate the conversation to an expert."""

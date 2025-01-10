@@ -1,4 +1,3 @@
-from langgraph import Node
 from copilotkit import PlanGenerator
 
 class GeneratePlanNode(Node):
