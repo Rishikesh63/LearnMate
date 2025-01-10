@@ -18,7 +18,7 @@ export default function Home() {
       "--copilot-kit-response-button-color": "#2563EB",
       "--copilot-kit-response-button-background-color": "#EFF6FF"
     } as CopilotKitCSSProperties}>
-      <CopilotKit runtimeUrl="/api/copilotkit" agent="study_plan_assistant">
+      <CopilotKit runtimeUrl="/api/copilotkit" agent="chatbot">
       <WaitForUserInput />
       </CopilotKit>
     </main>

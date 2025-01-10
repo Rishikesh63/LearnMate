@@ -6,14 +6,14 @@ import { CopilotPopup } from "@copilotkit/react-ui";
 export function WaitForUserInput() {
   // Using CoAgent for state management
   const popupAgent = useCoAgent({
-    name: "study_plan_assistant",
+    name: "chatbot",
     initialState: { isPopupOpen: false }, // Setting the initial state
   });
 
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";
+  // const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";
 
   useCopilotAction({
-    name: "study_plan_assistant",
+    name: "chatbot",
     available: "remote",
     parameters: [
       {
@@ -25,7 +25,7 @@ export function WaitForUserInput() {
     ],
     handler: async ({ query }) => {
       try {
-        const response = await fetch(BACKEND_URL, {
+        const response = await fetch(process.env.REMOTE_ACTION_URL || "http://127.0.0.1:8000/copilotkit", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
