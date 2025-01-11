@@ -3,7 +3,7 @@
 import { CopilotKit } from "@copilotkit/react-core";
 import { CopilotChat, CopilotKitCSSProperties } from "@copilotkit/react-ui";
 import "@copilotkit/react-ui/styles.css";
-import { WaitForUserInput } from "./WaitForUserInput";
+
 export default function Home() {
   return (
     <main className="h-screen w-full p-10" style={{
@@ -19,7 +19,16 @@ export default function Home() {
       "--copilot-kit-response-button-background-color": "#EFF6FF"
     } as CopilotKitCSSProperties}>
       <CopilotKit runtimeUrl="/api/copilotkit" agent="chatbot">
-      <WaitForUserInput />
+        <div>
+          <h1 className="text-2xl text-center">🦙 LLama Chat 🦙</h1>
+        </div>
+        <CopilotChat
+          className="h-full w-full"
+          labels={{
+            title: "LLama Assistant",
+            initial: "Hi! 👋 How can I assist you today?",
+          }}
+        />
       </CopilotKit>
     </main>
   );

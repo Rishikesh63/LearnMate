@@ -5,9 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LearnMate - Your Study Assistant",
-  description:
-    "LearnMate helps you create and manage personalized study plans, track your progress, and get feedback.",
+  title: "CoAgents Starter",
+  description: "CoAgents Starter",
 };
 
 export default function RootLayout({
@@ -16,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="light">
       <body className={inter.className}>{children}</body>
     </html>
   );
